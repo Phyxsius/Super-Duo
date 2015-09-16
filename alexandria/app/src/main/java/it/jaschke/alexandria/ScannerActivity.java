@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -58,6 +59,7 @@ public final class ScannerActivity extends AppCompatActivity {
     private CameraSource mCameraSource = null;
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
+    private String mResult;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -69,6 +71,7 @@ public final class ScannerActivity extends AppCompatActivity {
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
+        mResult = null;
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -129,7 +132,14 @@ public final class ScannerActivity extends AppCompatActivity {
         // graphics for each barcode on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each barcode.
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay);
+        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, new GraphicTracker.Callback() {
+            @Override
+            public void onFound(String barcode) {
+                Log.d(TAG, "Barcode value: " + barcode);
+                mResult = barcode;
+                if (barcode.length() == 13) finish();
+            }
+        });
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());
 
@@ -268,5 +278,16 @@ public final class ScannerActivity extends AppCompatActivity {
                 mCameraSource = null;
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        if (mResult != null) {
+            Intent extras = new Intent();
+            extras.putExtra(AddBook.BARCODE_EXTRA, mResult);
+
+            setResult(RESULT_OK, extras);
+        }
+        super.finish();
     }
 }

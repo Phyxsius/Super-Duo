@@ -178,5 +178,27 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         super.onBackPressed();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK &&
+                requestCode == AddBook.BARCODE_REQUEST &&
+                data.hasExtra(AddBook.BARCODE_EXTRA)) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment addBook = new AddBook();
+            Bundle args = new Bundle();
+
+            // Pass the barcode we got from the scanner activity results
+            args.putString(AddBook.BARCODE_EXTRA, data.getExtras().getString(AddBook.BARCODE_EXTRA));
+
+            addBook.setArguments(args);
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, addBook)
+                    .addToBackStack((String) title)
+                    .commit();
+
+        }
+    }
 }
