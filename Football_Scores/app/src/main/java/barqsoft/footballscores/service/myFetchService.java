@@ -40,7 +40,7 @@ public class myFetchService extends IntentService
     protected void onHandleIntent(Intent intent)
     {
         getData("n2");
-        getData("p2");
+        getData("p7");
 
         return;
     }
