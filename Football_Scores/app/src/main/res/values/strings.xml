@@ -37,4 +37,6 @@
     <string name="home_crest">Home Crest</string>
     <string name="away_crest">Away Crest</string>
     <string name="share_button">Share this match</string>
+    <string name="time_is">Time is </string>
+    <string name="score_is">Score is </string>
 </resources>
