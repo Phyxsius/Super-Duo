@@ -25,6 +25,8 @@
     <string name="back_button">go back</string>
     <string name="share_text">A must read book: </string>
 
+    <string name="check_network">Trouble connecting to the internet. Check your settings.</string>
+
     <string name="title_activity_scanner">Barcode Scanner</string>
 
     <string name="ok">OK</string>
