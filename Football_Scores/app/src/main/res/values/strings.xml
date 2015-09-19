@@ -39,4 +39,11 @@
     <string name="share_button">Share this match</string>
     <string name="time_is">Time is </string>
     <string name="score_is">Score is </string>
+
+    <string name="seria_a">Seria A</string>
+    <string name="premier_league">Premier League</string>
+    <string name="uefa_champions_league">UEFA Champions League</string>
+    <string name="primera_division">Primera Division</string>
+    <string name="Bundesliga">Bundesliga</string>
+    <string name="not_known_league_please_report">Not known League Please report</string>
 </resources>
