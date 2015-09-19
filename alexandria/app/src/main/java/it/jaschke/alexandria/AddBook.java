@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
+
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.services.DownloadImage;
@@ -35,8 +38,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private String mScanContents = "Contents:";
 
     public static final int BARCODE_REQUEST = 10;
-    public static final String BARCODE_EXTRA = "BARCODE_EXTRA";
-    private String mBarcode;
 
 
 
@@ -56,14 +57,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
         rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
         ean = (EditText) rootView.findViewById(R.id.ean);
-
-        Bundle args = getArguments();
-        if (args != null) {
-            mBarcode = args.getString(BARCODE_EXTRA);
-
-            ean.setText(mBarcode);
-            searchBook(mBarcode);
-        }
 
         ean.addTextChangedListener(new TextWatcher() {
             @Override
@@ -94,9 +87,9 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.scan_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ScannerActivity.class);
-                getActivity().startActivityForResult(intent, BARCODE_REQUEST);
-
+            Intent intent = new Intent(getActivity(), CaptureActivity.class);
+            intent.setAction(Intents.Scan.ACTION);
+            startActivityForResult(intent, BARCODE_REQUEST);
             }
         });
 
@@ -199,6 +192,14 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         activity.setTitle(R.string.scan);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == BARCODE_REQUEST && resultCode == getActivity().RESULT_OK) {
+            String barcode = data.getStringExtra(Intents.Scan.RESULT);
+            ean.setText(barcode);
+        }
     }
 
     private void searchBook(String barcode) {

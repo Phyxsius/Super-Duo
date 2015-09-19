@@ -43,12 +43,6 @@
             android:exported="false" >
         </service>
 
-        <activity
-            android:name=".ScannerActivity"
-            android:label="@string/title_activity_scanner"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:screenOrientation="fullSensor">
-        </activity>
     </application>
 
 </manifest>
